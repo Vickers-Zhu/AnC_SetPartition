@@ -1,22 +1,19 @@
 import os
 import sys
-sys.path.append('./exact')
+sys.path.append('./heuristics')
 import csv
-from partition import ExPartition
+from gd_partition import GdPartition
 
 
 def run(input_path, output_path):
     input_data = []
     output_data = []
 
-    try:
-        read_and_load(input_path, input_data)
+    read_and_load(input_path, input_data)
 
-        calc(input_data, output_data)
+    calc(input_data, output_data)
 
-        save(output_data, output_path)
-    except:
-        print("There are errors.")
+    save(output_data, output_path)
 
 
 def read_and_load(input_path, input_data):
@@ -29,11 +26,9 @@ def read_and_load(input_path, input_data):
 
 def calc(input_data, output_data):
     print("calculation")
-    pt = ExPartition(input_data)
-    pt.partition(0)
-    print(pt.p)
+    pt = GdPartition(input_data)
+    pt.partition()
 
 
 def save(output_data, output_path):
     print("save")
-

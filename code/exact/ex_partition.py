@@ -18,5 +18,3 @@ class ExPartition:
                         self.targets[k] += value
                         self.p[k].remove(value)
         return sum(self.targets) == 0
-
-
