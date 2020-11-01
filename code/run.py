@@ -1,8 +1,10 @@
 import os
 import sys
 sys.path.append('./heuristics')
+sys.path.append('./exact')
 import csv
 from gd_partition import GdPartition
+from ex_partition import ExPartition
 
 
 def run(input_path, output_path):
@@ -26,9 +28,14 @@ def read_and_load(input_path, input_data):
 
 def calc(input_data, output_data):
     print("calculation")
-    pt = GdPartition(input_data)
-    pt.partition()
+    pt = ExPartition(input_data)
+    pt.partition(0)
+    for i in range(0, 4):
+        output_data.append(pt.p[i])
 
 
 def save(output_data, output_path):
     print("save")
+    with open(os.path.join(output_path, "result.csv"), 'w') as file:
+        writer = csv.writer(file)
+        writer.writerows(output_data)
