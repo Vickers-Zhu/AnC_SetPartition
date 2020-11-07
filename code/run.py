@@ -3,13 +3,14 @@ import sys
 sys.path.append('./heuristics')
 sys.path.append('./exact')
 import csv
+import time
 from gd_partition import GdPartition
 from ex_partition import ExPartition
 
 
 def run(input_path, output_path):
-    input_data = []
-    output_data = []
+    input_data = {}
+    output_data = {}
 
     read_and_load(input_path, input_data)
 
@@ -19,23 +20,49 @@ def run(input_path, output_path):
 
 
 def read_and_load(input_path, input_data):
-    with open(os.path.join(input_path, "test1.csv"), 'r', encoding='utf-8-sig') as file:
+    input_1 = os.path.join(input_path, "test1.csv")
+    input_2 = os.path.join(input_path, "test2.csv")
+    inputpath = ""
+    if os.path.exists(input_1):
+        inputpath = input_1
+        input_data['option'] = 1
+    elif os.path.exists(input_2):
+        inputpath = input_2
+        input_data['option'] = 2
+    input_array = []
+    with open(inputpath, 'r', encoding='utf-8-sig') as file:
         reader = csv.reader(file)
         for row in reader:
             for i in row:
-                input_data.append(int(i))
+                input_array.append(int(i))
+    input_data['array'] = input_array
 
 
 def calc(input_data, output_data):
     print("calculation")
-    pt = ExPartition(input_data)
-    pt.partition(0)
+    pt = ""
+    start = ""
+    if input_data['option'] == 1:
+        print("Step: 1")
+        pt = ExPartition(input_data['array'])
+        start = time.process_time()
+        pt.partition()
+        output_data['time'] = time.process_time() - start
+    elif input_data['option'] == 2:
+        print("Step: 2")
+        pt = GdPartition(input_data['array'])
+        start = time.process_time()
+        pt.partition()
+        output_data['time'] = time.process_time() - start
+    output = []
     for i in range(0, 4):
-        output_data.append(pt.p[i])
+        output.append(pt.p[i])
+    output_data['result'] = output
 
 
 def save(output_data, output_path):
     print("save")
     with open(os.path.join(output_path, "result.csv"), 'w') as file:
         writer = csv.writer(file)
-        writer.writerows(output_data)
+        writer.writerows(output_data['result'])
+        writer.writerow("Time: "+str(output_data['time']))
