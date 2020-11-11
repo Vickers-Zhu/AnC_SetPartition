@@ -1,11 +1,8 @@
 import os
-import sys
-sys.path.append('./heuristics')
-sys.path.append('./exact')
 import csv
 import time
-from gd_partition import GdPartition
-from ex_partition import ExPartition
+from heuristics.gd_partition import GdPartition
+from exact.ex_partition import ExPartition
 
 
 def run(input_path, output_path):
@@ -47,13 +44,13 @@ def calc(input_data, output_data):
         pt = ExPartition(input_data['array'])
         start = time.process_time()
         pt.partition()
-        output_data['time'] = time.process_time() - start
+        output_data['time'] = format(time.process_time() - start, 'f')
     elif input_data['option'] == 2:
         print("Step: 2")
         pt = GdPartition(input_data['array'])
         start = time.process_time()
         pt.partition()
-        output_data['time'] = time.process_time() - start
+        output_data['time'] = format(time.process_time() - start, 'f')
     output = []
     for i in range(0, 4):
         output.append(pt.p[i])

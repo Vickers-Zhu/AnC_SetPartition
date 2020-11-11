@@ -1,6 +1,7 @@
 import random
 import os
 import csv
+import matplotlib.pyplot as plt
 
 
 def generate_csv(n, output_path):
@@ -15,3 +16,11 @@ def generate_input(n):
     for i in range(0, n):
         array.append(random.randint(1, 10))
     return array
+
+
+def generate_plot(x, y):
+    plt.plot(x, y, label="time consuming")
+    plt.xlabel('numbers of weights')
+    plt.ylabel('time')
+    plt.legend()
+    plt.show()
