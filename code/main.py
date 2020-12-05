@@ -1,12 +1,9 @@
 import os
 from run import run
-from methods import generate_csv
-from methods import generate_plot
-
 
 if __name__ == '__main__':
-    input_path = "../test/input"
-    output_path = "../test/output"
+    input_path = "../examples"
+    output_path = "./"
 
     run(input_path, output_path)
 

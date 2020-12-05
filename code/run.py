@@ -1,8 +1,8 @@
 import os
 import time
-from code.heuristics.gd_partition import GdPartition
-from code.exact.ex_partition import ExPartition
-from code.methods import generate_input
+from heuristics.gd_partition import GdPartition
+from exact.ex_partition import ExPartition
+from methods import generate_input
 
 
 def run(input_path, output_path):
@@ -57,6 +57,7 @@ def read_and_load(input_path, input_data):
 def calc(input_data, output_data):
     print("calculation")
     outputs = []
+    output = {}
     for atom in input_data['input']:
         input_array = ""
         if len(atom[2]) == 1:
@@ -66,13 +67,15 @@ def calc(input_data, output_data):
         pt = ""
         if atom[0] == 'o':
             pt = ExPartition(input_array)
+            output['type'] = "O"
         else:
             pt = GdPartition(input_array)
+            output['type'] = "H"
 
         start = time.process_time()
         pt.partition()
         output = {'result': pt.p,
-                  'time': format(time.process_time() - start, 'f')}
+                  'time': time.process_time() - start}
         outputs.append(output)
         output_data['output'] = outputs
 
