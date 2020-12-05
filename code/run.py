@@ -1,8 +1,10 @@
 import os
 import time
+import traceback
+
 from heuristics.gd_partition import GdPartition
 from exact.ex_partition import ExPartition
-from methods import generate_input
+from methods import generate_input, fitness, test_sum_of_weights, test_correctness
 
 
 def run(input_path, output_path):
@@ -14,6 +16,8 @@ def run(input_path, output_path):
     calc(input_data, output_data)
 
     save(output_data, output_path)
+
+    os.system("pause")
 
 
 def read_and_load(input_path, input_data):
@@ -57,27 +61,45 @@ def read_and_load(input_path, input_data):
 def calc(input_data, output_data):
     print("calculation")
     outputs = []
-    output = {}
     for atom in input_data['input']:
+        output = {}
         input_array = ""
         if len(atom[2]) == 1:
             input_array = generate_input(atom[2][0])
         else:
             input_array = atom[2]
         pt = ""
-        if atom[0] == 'o':
+        num_of_weights = len(input_array)
+        if atom[0].lower() == 'o':
             pt = ExPartition(input_array)
-            output['type'] = "O"
+            output['type'] = "o"
         else:
             pt = GdPartition(input_array)
-            output['type'] = "H"
+            output['type'] = "h"
 
         start = time.process_time()
-        pt.partition()
-        output = {'result': pt.p,
-                  'time': time.process_time() - start}
+        result = ""
+        try:
+            pt.partition()
+            result = pt.p[:]
+            if output['type'] == 'o':
+                pt.p_his = pt.p_his[1:]
+                if test_sum_of_weights(pt.p):
+                    result = pt.p_his[-1]
+        except Exception as e:
+            msg = traceback.format_exc()
+            print(msg)
+            print("Maybe the OPTIMAL partition is only suitable for weights which can be partitioned in to 4"
+                  "parts with the SAME sum.")
+        finally:
+            pass
+        output = {'type': output['type'],
+                  'result': result,
+                  'time': format(time.process_time() - start, '.10f'),
+                  'fitness': fitness(partitions=result)}
+        print(output)
         outputs.append(output)
-        output_data['output'] = outputs
+    output_data['output'] = outputs
 
 
 def save(output_data, output_path):
