@@ -1,7 +1,6 @@
 import os
 import time
 import traceback
-import msvcrt
 
 from heuristics.gd_partition import GdPartition
 from exact.ex_partition import ExPartition
@@ -12,7 +11,7 @@ def run(input_path, output_path):
     while True:
         input_data = {}
         output_data = {}
-        input_path = input("Please drag the file to here\n")
+        input_path = input("Please drag the file to here\n").strip()
 
         read_and_load(input_path, input_data)
 
