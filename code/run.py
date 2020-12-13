@@ -1,6 +1,7 @@
 import os
 import time
 import traceback
+import msvcrt
 
 from heuristics.gd_partition import GdPartition
 from exact.ex_partition import ExPartition
@@ -8,28 +9,28 @@ from methods import generate_input, fitness, test_sum_of_weights, test_correctne
 
 
 def run(input_path, output_path):
-    input_data = {}
-    output_data = {}
+    while True:
+        input_data = {}
+        output_data = {}
+        input_path = input("Please drag the file to here\n")
 
-    read_and_load(input_path, input_data)
+        read_and_load(input_path, input_data)
 
-    calc(input_data, output_data)
+        calc(input_data, output_data)
 
-    save(output_data, output_path)
-
-    os.system("pause")
+        save(output_data, output_path)
 
 
 def read_and_load(input_path, input_data):
     print('Read and Load')
-    f_list = os.listdir(input_path)
+    # f_list = os.listdir(input_path)
     lines = []
     new_lines = []
-    for i in f_list:
-        if os.path.splitext(i)[1] == '.txt':
-            f = open(os.path.join(input_path, i), 'r')
-            lines = lines + f.readlines()
-            f.close()
+    # for i in f_list:
+    #     if os.path.splitext(i)[1] == '.txt':
+    f = open(input_path, 'r')
+    lines = lines + f.readlines()
+    f.close()
     for line in lines:
         new_str = str(line).strip().replace('\t', '').replace('\r', '').replace('\n', '')
         if new_str == "":
