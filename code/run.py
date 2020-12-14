@@ -82,15 +82,9 @@ def calc(input_data, output_data):
         try:
             pt.partition()
             result = pt.p[:]
-            if output['type'] == 'o':
-                pt.p_his = pt.p_his[1:]
-                if test_sum_of_weights(pt.p):
-                    result = pt.p_his[-1]
         except Exception as e:
             msg = traceback.format_exc()
             print(msg)
-            print("Maybe the OPTIMAL partition is only suitable for weights which can be partitioned in to 4"
-                  "parts with the SAME sum.")
         finally:
             pass
         output = {'type': output['type'],
