@@ -11,7 +11,11 @@ def run(input_path, output_path):
     while True:
         input_data = {}
         output_data = {}
-        input_path = input("Please drag the file to here\n").strip()
+        file_name = input("Please input the file name placed in the same folder as execution.bat\n"
+            "Press E to quit.\n").strip()
+        if file_name == "E":
+            return
+        input_path = os.path.join(os.getcwd(), file_name)
 
         read_and_load(input_path, input_data)
 
@@ -19,17 +23,28 @@ def run(input_path, output_path):
 
         save(output_data, output_path)
 
+        os.system("pause")
+
 
 def read_and_load(input_path, input_data):
-    print('Read and Load')
     # f_list = os.listdir(input_path)
     lines = []
     new_lines = []
     # for i in f_list:
     #     if os.path.splitext(i)[1] == '.txt':
-    f = open(input_path, 'r')
-    lines = lines + f.readlines()
-    f.close()
+    try:
+        f = open(input_path, 'r')
+        lines = lines + f.readlines()
+        f.close()
+    except Exception as e:
+        msg = traceback.format_exc()
+        # print(msg)
+        print("File not found!!\n"
+            "1. Please make sure you the file name has been input correctly\n"
+            "2. Please make sure the input text file is in the same directory as execution.bat\n")
+    finally:
+        pass
+
     for line in lines:
         new_str = str(line).strip().replace('\t', '').replace('\r', '').replace('\n', '')
         if new_str == "":
@@ -59,13 +74,14 @@ def read_and_load(input_path, input_data):
 
 
 def calc(input_data, output_data):
-    print("calculation")
     outputs = []
     for atom in input_data['input']:
         output = {}
         input_array = ""
         if len(atom[2]) == 1:
             input_array = generate_input(atom[2][0])
+            print("Generated array is")
+            print(input_array)
         else:
             input_array = atom[2]
         pt = ""
@@ -84,7 +100,8 @@ def calc(input_data, output_data):
             result = pt.p[:]
         except Exception as e:
             msg = traceback.format_exc()
-            print(msg)
+            # print(msg)
+            print("Error during partition")
         finally:
             pass
         output = {'type': output['type'],
@@ -97,7 +114,6 @@ def calc(input_data, output_data):
 
 
 def save(output_data, output_path):
-    print("save")
     f = open(os.path.join(output_path, 'result.txt'), 'w')
     for line in output_data['output']:
         f.write(str(line) + '\n')

@@ -22,7 +22,6 @@ class ExPartition:
 
     def partition(self):
         length = len(self.array)
-        print("length of the array is :", length)
         result =[sys.maxsize, []]
         if length < 5:
             i = 0
@@ -62,7 +61,6 @@ class ExPartition:
                                         result[0] = cur_res
                                         result[1] = cur_per
         self.p = result[1]
-        print(result)
 #
 #
 # a = ExPartition(test_array)
